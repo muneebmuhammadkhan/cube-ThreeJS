@@ -3,7 +3,7 @@ import InteractiveLetter from "@/components/InteractiveCube";
 
 const Index = () => {
   return (
-    <div className="w-screen h-screen" style={{ background: "#000" }} tabIndex={0}>
+    <div className="w-screen h-screen" style={{ background: "#d4ff00" }} tabIndex={0}>
       <Canvas
         camera={{ position: [8, 6, 8], fov: 50 }}
         style={{ width: "100%", height: "100%" }}
