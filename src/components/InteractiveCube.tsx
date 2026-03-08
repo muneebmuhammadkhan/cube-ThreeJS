@@ -1,7 +1,6 @@
-import { useRef, useEffect } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useRef, useEffect, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import batLogoUrl from "@/assets/bat-logo.png";
 
 const RANGE = 5;
 const LERP_FACTOR = 0.08;
@@ -9,12 +8,67 @@ const Y_AMPLITUDE = 1.2;
 const Y_FREQUENCY = 1.5;
 const KEY_SPEED = 0.15;
 
+function createBatShape() {
+  const shape = new THREE.Shape();
+  // Center body
+  shape.moveTo(0, 0.3);
+  // Head ears
+  shape.lineTo(0.15, 0.8);
+  shape.lineTo(0.25, 0.5);
+  shape.lineTo(0.35, 0.9);
+  shape.lineTo(0.4, 0.45);
+  // Right wing top
+  shape.lineTo(0.8, 0.6);
+  shape.lineTo(1.4, 0.7);
+  shape.lineTo(1.8, 0.5);
+  shape.lineTo(2.0, 0.35);
+  // Right wing tip
+  shape.lineTo(2.2, 0.2);
+  // Right wing bottom scallops
+  shape.lineTo(1.7, 0.05);
+  shape.lineTo(1.5, -0.15);
+  shape.lineTo(1.1, 0.0);
+  shape.lineTo(0.8, -0.2);
+  shape.lineTo(0.5, -0.05);
+  // Bottom center
+  shape.lineTo(0.2, -0.3);
+  shape.lineTo(0, -0.15);
+  // Mirror left side
+  shape.lineTo(-0.2, -0.3);
+  shape.lineTo(-0.5, -0.05);
+  shape.lineTo(-0.8, -0.2);
+  shape.lineTo(-1.1, 0.0);
+  shape.lineTo(-1.5, -0.15);
+  shape.lineTo(-1.7, 0.05);
+  shape.lineTo(-2.2, 0.2);
+  shape.lineTo(-2.0, 0.35);
+  shape.lineTo(-1.8, 0.5);
+  shape.lineTo(-1.4, 0.7);
+  shape.lineTo(-0.8, 0.6);
+  shape.lineTo(-0.4, 0.45);
+  shape.lineTo(-0.35, 0.9);
+  shape.lineTo(-0.25, 0.5);
+  shape.lineTo(-0.15, 0.8);
+  shape.lineTo(0, 0.3);
+  return shape;
+}
+
 export default function InteractiveLetter() {
   const groupRef = useRef<THREE.Group>(null!);
   const target = useRef(new THREE.Vector3(0, 0, 0));
   const keys = useRef({ left: false, right: false, up: false, down: false });
 
-  const texture = useLoader(THREE.TextureLoader, batLogoUrl);
+  const batShape = useMemo(() => createBatShape(), []);
+  const extrudeSettings = useMemo(
+    () => ({
+      depth: 0.4,
+      bevelEnabled: true,
+      bevelThickness: 0.08,
+      bevelSize: 0.05,
+      bevelSegments: 3,
+    }),
+    []
+  );
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {
@@ -64,16 +118,15 @@ export default function InteractiveLetter() {
   });
 
   return (
-    <group ref={groupRef}>
-      <mesh>
-        <planeGeometry args={[4, 2.5]} />
-        <meshStandardMaterial
-          map={texture}
-          transparent
-          alphaTest={0.5}
-          side={THREE.DoubleSide}
-          emissive="#222222"
-          emissiveIntensity={0.3}
+    <group ref={groupRef} scale={1.5}>
+      <mesh rotation={[0, 0, 0]} position={[0, -0.2, -0.2]}>
+        <extrudeGeometry args={[batShape, extrudeSettings]} />
+        <meshPhysicalMaterial
+          color="#1a1a1a"
+          metalness={0.7}
+          roughness={0.3}
+          clearcoat={0.4}
+          clearcoatRoughness={0.2}
         />
       </mesh>
     </group>
