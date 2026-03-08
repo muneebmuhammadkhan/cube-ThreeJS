@@ -144,11 +144,7 @@ export default function InteractiveLetter() {
             bevelSize={0.02}
           >
             MK
-            <meshStandardMaterial
-              color="lime"
-              emissive="lime"
-              emissiveIntensity={1.5}
-            />
+            <meshStandardMaterial color="lime" />
           </Text3D>
         </Center>
       </group>
