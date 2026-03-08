@@ -84,7 +84,7 @@ export default function InteractiveLetter() {
       {/* Left wing */}
       <mesh position={[-1.2, 0, 0.3]} rotation={[0, 0, -0.15]}>
         <boxGeometry args={[2, 0.06, 1]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Right wing */}
