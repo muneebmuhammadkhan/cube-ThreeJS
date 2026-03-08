@@ -120,7 +120,7 @@ export default function InteractiveLetter() {
       {/* Right rear stabilizer */}
       <mesh position={[0.5, 0, 1.2]} rotation={[0, 0, 0.3]}>
         <boxGeometry args={[0.8, 0.04, 0.4]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Engine left */}
