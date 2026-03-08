@@ -8,67 +8,12 @@ const Y_AMPLITUDE = 1.2;
 const Y_FREQUENCY = 1.5;
 const KEY_SPEED = 0.15;
 
-function createBatShape() {
-  const shape = new THREE.Shape();
-  // Center body
-  shape.moveTo(0, 0.3);
-  // Head ears
-  shape.lineTo(0.15, 0.8);
-  shape.lineTo(0.25, 0.5);
-  shape.lineTo(0.35, 0.9);
-  shape.lineTo(0.4, 0.45);
-  // Right wing top
-  shape.lineTo(0.8, 0.6);
-  shape.lineTo(1.4, 0.7);
-  shape.lineTo(1.8, 0.5);
-  shape.lineTo(2.0, 0.35);
-  // Right wing tip
-  shape.lineTo(2.2, 0.2);
-  // Right wing bottom scallops
-  shape.lineTo(1.7, 0.05);
-  shape.lineTo(1.5, -0.15);
-  shape.lineTo(1.1, 0.0);
-  shape.lineTo(0.8, -0.2);
-  shape.lineTo(0.5, -0.05);
-  // Bottom center
-  shape.lineTo(0.2, -0.3);
-  shape.lineTo(0, -0.15);
-  // Mirror left side
-  shape.lineTo(-0.2, -0.3);
-  shape.lineTo(-0.5, -0.05);
-  shape.lineTo(-0.8, -0.2);
-  shape.lineTo(-1.1, 0.0);
-  shape.lineTo(-1.5, -0.15);
-  shape.lineTo(-1.7, 0.05);
-  shape.lineTo(-2.2, 0.2);
-  shape.lineTo(-2.0, 0.35);
-  shape.lineTo(-1.8, 0.5);
-  shape.lineTo(-1.4, 0.7);
-  shape.lineTo(-0.8, 0.6);
-  shape.lineTo(-0.4, 0.45);
-  shape.lineTo(-0.35, 0.9);
-  shape.lineTo(-0.25, 0.5);
-  shape.lineTo(-0.15, 0.8);
-  shape.lineTo(0, 0.3);
-  return shape;
-}
-
 export default function InteractiveLetter() {
   const groupRef = useRef<THREE.Group>(null!);
   const target = useRef(new THREE.Vector3(0, 0, 0));
   const keys = useRef({ left: false, right: false, up: false, down: false });
-
-  const batShape = useMemo(() => createBatShape(), []);
-  const extrudeSettings = useMemo(
-    () => ({
-      depth: 0.4,
-      bevelEnabled: true,
-      bevelThickness: 0.08,
-      bevelSize: 0.05,
-      bevelSegments: 3,
-    }),
-    []
-  );
+  const thrusterRef1 = useRef<THREE.Mesh>(null!);
+  const thrusterRef2 = useRef<THREE.Mesh>(null!);
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {
@@ -114,28 +59,98 @@ export default function InteractiveLetter() {
       Math.sin(clock.elapsedTime * Y_FREQUENCY) * Y_AMPLITUDE + dist * 0.8;
 
     groupRef.current.position.lerp(target.current, LERP_FACTOR);
-    groupRef.current.rotation.y += 0.01;
+    groupRef.current.rotation.y += 0.008;
+
+    // Thruster flicker
+    const flicker = 0.7 + Math.sin(clock.elapsedTime * 30) * 0.3;
+    if (thrusterRef1.current) thrusterRef1.current.scale.y = flicker;
+    if (thrusterRef2.current) thrusterRef2.current.scale.y = flicker;
   });
 
   return (
-    <group ref={groupRef} scale={1.5}>
-      {/* Solid bat */}
-      <mesh rotation={[0, 0, 0]} position={[0, -0.2, -0.2]}>
-        <extrudeGeometry args={[batShape, extrudeSettings]} />
-        <meshPhysicalMaterial
-          color="#1a1a1a"
-          metalness={0.7}
-          roughness={0.3}
-          clearcoat={0.4}
-          clearcoatRoughness={0.2}
-          emissive="#1a1a1a"
-          emissiveIntensity={0.2}
-        />
+    <group ref={groupRef} scale={0.8}>
+      {/* Main fuselage */}
+      <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.15, 0.5, 3, 8]} />
+        <meshPhysicalMaterial color="#555566" metalness={0.9} roughness={0.2} />
       </mesh>
-      {/* Lime outline - slightly larger */}
-      <mesh rotation={[0, 0, 0]} position={[0, -0.2, -0.2]} scale={1.04}>
-        <extrudeGeometry args={[batShape, { ...extrudeSettings, depth: 0.42 }]} />
-        <meshBasicMaterial color="#c8ff00" side={THREE.BackSide} />
+
+      {/* Cockpit dome */}
+      <mesh position={[0, 0.15, -1]}>
+        <sphereGeometry args={[0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshPhysicalMaterial color="#44aaff" metalness={0.3} roughness={0.1} transparent opacity={0.7} />
+      </mesh>
+
+      {/* Left wing */}
+      <mesh position={[-1.2, 0, 0.3]} rotation={[0, 0, -0.15]}>
+        <boxGeometry args={[2, 0.06, 1]} />
+        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Right wing */}
+      <mesh position={[1.2, 0, 0.3]} rotation={[0, 0, 0.15]}>
+        <boxGeometry args={[2, 0.06, 1]} />
+        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Left wing tip / cannon */}
+      <mesh position={[-2.1, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.05, 0.08, 0.8, 6]} />
+        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+      </mesh>
+
+      {/* Right wing tip / cannon */}
+      <mesh position={[2.1, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.05, 0.08, 0.8, 6]} />
+        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+      </mesh>
+
+      {/* Rear fin - vertical */}
+      <mesh position={[0, 0.4, 1.2]}>
+        <boxGeometry args={[0.06, 0.7, 0.6]} />
+        <meshPhysicalMaterial color="#cc3333" metalness={0.7} roughness={0.3} />
+      </mesh>
+
+      {/* Left rear stabilizer */}
+      <mesh position={[-0.5, 0, 1.2]} rotation={[0, 0, -0.3]}>
+        <boxGeometry args={[0.8, 0.04, 0.4]} />
+        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Right rear stabilizer */}
+      <mesh position={[0.5, 0, 1.2]} rotation={[0, 0, 0.3]}>
+        <boxGeometry args={[0.8, 0.04, 0.4]} />
+        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Engine left */}
+      <mesh position={[-0.4, -0.05, 1.3]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.12, 0.15, 0.5, 8]} />
+        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+      </mesh>
+
+      {/* Engine right */}
+      <mesh position={[0.4, -0.05, 1.3]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.12, 0.15, 0.5, 8]} />
+        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+      </mesh>
+
+      {/* Thruster glow left */}
+      <mesh ref={thrusterRef1} position={[-0.4, -0.05, 1.7]} rotation={[Math.PI / 2, 0, 0]}>
+        <coneGeometry args={[0.1, 0.6, 8]} />
+        <meshBasicMaterial color="#00ccff" transparent opacity={0.6} />
+      </mesh>
+
+      {/* Thruster glow right */}
+      <mesh ref={thrusterRef2} position={[0.4, -0.05, 1.7]} rotation={[Math.PI / 2, 0, 0]}>
+        <coneGeometry args={[0.1, 0.6, 8]} />
+        <meshBasicMaterial color="#00ccff" transparent opacity={0.6} />
+      </mesh>
+
+      {/* Accent stripe on fuselage */}
+      <mesh position={[0, 0.16, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.16, 0.35, 2.5, 8]} />
+        <meshBasicMaterial color="#c8ff00" transparent opacity={0.15} />
       </mesh>
     </group>
   );
