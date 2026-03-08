@@ -72,7 +72,7 @@ export default function InteractiveLetter() {
       {/* Main fuselage */}
       <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.15, 0.5, 3, 8]} />
-        <meshPhysicalMaterial color="#555566" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#cccccc" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Cockpit dome */}
@@ -84,55 +84,55 @@ export default function InteractiveLetter() {
       {/* Left wing */}
       <mesh position={[-1.2, 0, 0.3]} rotation={[0, 0, -0.15]}>
         <boxGeometry args={[2, 0.06, 1]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Right wing */}
       <mesh position={[1.2, 0, 0.3]} rotation={[0, 0, 0.15]}>
         <boxGeometry args={[2, 0.06, 1]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Left wing tip / cannon */}
       <mesh position={[-2.1, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.05, 0.08, 0.8, 6]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Right wing tip / cannon */}
       <mesh position={[2.1, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.05, 0.08, 0.8, 6]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Rear fin - vertical */}
       <mesh position={[0, 0.4, 1.2]}>
         <boxGeometry args={[0.06, 0.7, 0.6]} />
-        <meshPhysicalMaterial color="#cc3333" metalness={0.7} roughness={0.3} />
+        <meshPhysicalMaterial color="#dd4444" metalness={0.7} roughness={0.3} />
       </mesh>
 
       {/* Left rear stabilizer */}
       <mesh position={[-0.5, 0, 1.2]} rotation={[0, 0, -0.3]}>
         <boxGeometry args={[0.8, 0.04, 0.4]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Right rear stabilizer */}
       <mesh position={[0.5, 0, 1.2]} rotation={[0, 0, 0.3]}>
         <boxGeometry args={[0.8, 0.04, 0.4]} />
-        <meshPhysicalMaterial color="#444455" metalness={0.8} roughness={0.3} />
+        <meshPhysicalMaterial color="#bbbbbb" metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Engine left */}
       <mesh position={[-0.4, -0.05, 1.3]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.12, 0.15, 0.5, 8]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Engine right */}
       <mesh position={[0.4, -0.05, 1.3]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.12, 0.15, 0.5, 8]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Thruster glow left */}
