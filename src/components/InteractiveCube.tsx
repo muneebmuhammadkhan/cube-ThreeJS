@@ -72,7 +72,7 @@ export default function InteractiveLetter() {
       {/* Main fuselage */}
       <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.15, 0.5, 3, 8]} />
-        <meshPhysicalMaterial color="#555566" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#cccccc" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Cockpit dome */}
