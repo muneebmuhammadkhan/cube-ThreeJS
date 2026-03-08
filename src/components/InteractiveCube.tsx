@@ -1,5 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Line } from "@react-three/drei";
 import * as THREE from "three";
 
 const RANGE = 5;
@@ -60,13 +61,12 @@ export default function InteractiveLetter() {
     groupRef.current.rotation.y += 0.005;
   });
 
-  // Rope positions (4 corners of basket to balloon edge)
-  const ropeOffsets = [
-    [0.25, 0, 0.25],
-    [-0.25, 0, 0.25],
-    [0.25, 0, -0.25],
-    [-0.25, 0, -0.25],
-  ] as const;
+  const ropePoints: [number, number, number][][] = [
+    [[0.75, 0.55, 0.75], [0.25, -0.6, 0.25]],
+    [[-0.75, 0.55, 0.75], [-0.25, -0.6, 0.25]],
+    [[0.75, 0.55, -0.75], [0.25, -0.6, -0.25]],
+    [[-0.75, 0.55, -0.75], [-0.25, -0.6, -0.25]],
+  ];
 
   return (
     <group ref={groupRef}>
@@ -93,18 +93,9 @@ export default function InteractiveLetter() {
       </mesh>
 
       {/* Ropes */}
-      {ropeOffsets.map(([x, , z], i) => {
-        const points = [
-          new THREE.Vector3(x * 3, 0.55, z * 3),
-          new THREE.Vector3(x, -0.6, z),
-        ];
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-        return (
-          <line key={i} geometry={geometry}>
-            <lineBasicMaterial color="#8B7355" linewidth={1} />
-          </line>
-        );
-      })}
+      {ropePoints.map((points, i) => (
+        <Line key={i} points={points} color="#8B7355" lineWidth={1.5} />
+      ))}
 
       {/* Basket */}
       <mesh position={[0, -0.85, 0]}>
@@ -113,7 +104,7 @@ export default function InteractiveLetter() {
       </mesh>
 
       {/* Basket rim */}
-      <mesh position={[0, -0.6, 0]}>
+      <mesh position={[0, -0.6, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.35, 0.04, 8, 16]} />
         <meshStandardMaterial color="#A0522D" />
       </mesh>
