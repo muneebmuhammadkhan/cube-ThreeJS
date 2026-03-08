@@ -1,7 +1,7 @@
-import { useRef, useEffect, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Line } from "@react-three/drei";
+import { useRef, useEffect } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
+import batLogoUrl from "@/assets/bat-logo.png";
 
 const RANGE = 5;
 const LERP_FACTOR = 0.08;
@@ -13,6 +13,8 @@ export default function InteractiveLetter() {
   const groupRef = useRef<THREE.Group>(null!);
   const target = useRef(new THREE.Vector3(0, 0, 0));
   const keys = useRef({ left: false, right: false, up: false, down: false });
+
+  const texture = useLoader(THREE.TextureLoader, batLogoUrl);
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {
@@ -58,55 +60,21 @@ export default function InteractiveLetter() {
       Math.sin(clock.elapsedTime * Y_FREQUENCY) * Y_AMPLITUDE + dist * 0.8;
 
     groupRef.current.position.lerp(target.current, LERP_FACTOR);
-    groupRef.current.rotation.y += 0.005;
+    groupRef.current.rotation.y += 0.01;
   });
-
-  const ropePoints: [number, number, number][][] = [
-    [[0.75, 0.55, 0.75], [0.25, -0.6, 0.25]],
-    [[-0.75, 0.55, 0.75], [-0.25, -0.6, 0.25]],
-    [[0.75, 0.55, -0.75], [0.25, -0.6, -0.25]],
-    [[-0.75, 0.55, -0.75], [-0.25, -0.6, -0.25]],
-  ];
 
   return (
     <group ref={groupRef}>
-      {/* Balloon envelope */}
-      <mesh position={[0, 1.8, 0]}>
-        <sphereGeometry args={[1.2, 32, 32]} />
-        <meshStandardMaterial color="#e74c3c" />
-      </mesh>
-
-      {/* Balloon stripes */}
-      <mesh position={[0, 1.8, 0]} rotation={[0, Math.PI / 4, 0]}>
-        <sphereGeometry args={[1.21, 32, 32, 0, Math.PI * 0.5]} />
-        <meshStandardMaterial color="#f39c12" />
-      </mesh>
-      <mesh position={[0, 1.8, 0]} rotation={[0, -Math.PI / 4, 0]}>
-        <sphereGeometry args={[1.21, 32, 32, Math.PI, Math.PI * 0.5]} />
-        <meshStandardMaterial color="#f39c12" />
-      </mesh>
-
-      {/* Balloon bottom skirt */}
-      <mesh position={[0, 0.55, 0]}>
-        <cylinderGeometry args={[0.6, 0.3, 0.3, 16]} />
-        <meshStandardMaterial color="#c0392b" />
-      </mesh>
-
-      {/* Ropes */}
-      {ropePoints.map((points, i) => (
-        <Line key={i} points={points} color="#8B7355" lineWidth={1.5} />
-      ))}
-
-      {/* Basket */}
-      <mesh position={[0, -0.85, 0]}>
-        <cylinderGeometry args={[0.35, 0.3, 0.5, 8]} />
-        <meshStandardMaterial color="#8B4513" />
-      </mesh>
-
-      {/* Basket rim */}
-      <mesh position={[0, -0.6, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.35, 0.04, 8, 16]} />
-        <meshStandardMaterial color="#A0522D" />
+      <mesh>
+        <planeGeometry args={[4, 2.5]} />
+        <meshStandardMaterial
+          map={texture}
+          transparent
+          alphaTest={0.5}
+          side={THREE.DoubleSide}
+          emissive="#222222"
+          emissiveIntensity={0.3}
+        />
       </mesh>
     </group>
   );
