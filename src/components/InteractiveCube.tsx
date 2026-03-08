@@ -76,7 +76,7 @@ export default function InteractiveLetter() {
           bevelThickness={0.05}
           bevelSize={0.02}
         >
-          MUNEEB
+          MK
           <meshStandardMaterial color="lime" />
         </Text3D>
       </Center>
