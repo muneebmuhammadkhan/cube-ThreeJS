@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import InteractiveLetter from "@/components/InteractiveCube";
 
 const Index = () => {
@@ -11,6 +12,14 @@ const Index = () => {
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 10, 5]} intensity={1} />
         <InteractiveLetter />
+        <EffectComposer>
+          <Bloom
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.9}
+            intensity={1.5}
+            mipmapBlur
+          />
+        </EffectComposer>
       </Canvas>
     </div>
   );
