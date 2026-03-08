@@ -119,6 +119,7 @@ export default function InteractiveLetter() {
 
   return (
     <group ref={groupRef} scale={1.5}>
+      {/* Solid bat */}
       <mesh rotation={[0, 0, 0]} position={[0, -0.2, -0.2]}>
         <extrudeGeometry args={[batShape, extrudeSettings]} />
         <meshPhysicalMaterial
@@ -127,7 +128,14 @@ export default function InteractiveLetter() {
           roughness={0.3}
           clearcoat={0.4}
           clearcoatRoughness={0.2}
+          emissive="#1a1a1a"
+          emissiveIntensity={0.2}
         />
+      </mesh>
+      {/* Lime outline - slightly larger */}
+      <mesh rotation={[0, 0, 0]} position={[0, -0.2, -0.2]} scale={1.04}>
+        <extrudeGeometry args={[batShape, { ...extrudeSettings, depth: 0.42 }]} />
+        <meshBasicMaterial color="#c8ff00" side={THREE.BackSide} />
       </mesh>
     </group>
   );
