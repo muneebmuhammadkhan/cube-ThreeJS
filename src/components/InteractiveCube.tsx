@@ -126,7 +126,7 @@ export default function InteractiveLetter() {
       {/* Engine left */}
       <mesh position={[-0.4, -0.05, 1.3]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.12, 0.15, 0.5, 8]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Engine right */}
