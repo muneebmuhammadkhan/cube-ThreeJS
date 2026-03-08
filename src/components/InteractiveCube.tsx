@@ -102,7 +102,7 @@ export default function InteractiveLetter() {
       {/* Right wing tip / cannon */}
       <mesh position={[2.1, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.05, 0.08, 0.8, 6]} />
-        <meshPhysicalMaterial color="#333344" metalness={0.9} roughness={0.2} />
+        <meshPhysicalMaterial color="#aaaaaa" metalness={0.9} roughness={0.2} />
       </mesh>
 
       {/* Rear fin - vertical */}
