@@ -51,8 +51,6 @@ export default function InteractiveLetter() {
         const opacity = ((TRAIL_LENGTH - i) / TRAIL_LENGTH) * 0.35;
         return new THREE.MeshStandardMaterial({
           color: new THREE.Color("lime"),
-          emissive: new THREE.Color("lime"),
-          emissiveIntensity: 2 * ((TRAIL_LENGTH - i) / TRAIL_LENGTH),
           transparent: true,
           opacity,
           depthWrite: false,
